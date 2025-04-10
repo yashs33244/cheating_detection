@@ -41,22 +41,45 @@ def setup_camera(source):
     """
     # Check if source is a URL (including S3)
     is_url = bool(re.match(r'https?://', source))
+    is_rtsp = bool(re.match(r'rtsp://', source))
     
-    # For URLs, we need to handle them differently
-    if is_url:
-        logger.info(f"Processing video from URL: {source}")
-        # For URLs, we need to use the URL directly
-        cap = cv2.VideoCapture(source)
+    logger.info(f"Connecting to video source: {source}")
+    
+    # For RTSP streams, we need to set additional parameters
+    if is_rtsp:
+        logger.info("Detected RTSP stream, setting up with RTSP parameters")
+        # Set RTSP transport to TCP for better reliability
+        cap = cv2.VideoCapture(source, cv2.CAP_FFMPEG)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Minimize buffer size for lower latency
+        
+        # Set additional RTSP parameters for better connection
+        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4'))
+        cap.set(cv2.CAP_PROP_FPS, 30)  # Set FPS
+        
+        # Try to connect with a timeout
+        start_time = time.time()
+        timeout = 10  # 10 seconds timeout
+        
+        while not cap.isOpened() and time.time() - start_time < timeout:
+            logger.info("Waiting for RTSP connection...")
+            time.sleep(1)
+            cap = cv2.VideoCapture(source, cv2.CAP_FFMPEG)
     else:
-        # For local files, check if they exist
-        if not os.path.exists(source):
-            raise Exception(f"File not found: {source}")
-        logger.info(f"Processing local video file: {source}")
+        # For URLs or local files
+        if is_url:
+            logger.info(f"Processing video from URL: {source}")
+        else:
+            # For local files, check if they exist
+            if not os.path.exists(source):
+                raise Exception(f"File not found: {source}")
+            logger.info(f"Processing local video file: {source}")
+        
         cap = cv2.VideoCapture(source)
     
     if not cap.isOpened():
         raise Exception(f"Failed to open video source: {source}")
     
+    logger.info("Successfully connected to video source")
     return cap
 
 # --- Step 3: Load models ---
@@ -176,60 +199,77 @@ class StreamProcessor:
     
     def _process_stream(self, source, client_id, channel):
         """Process a stream and publish results to Redis"""
-        try:
-            # Setup camera
-            logger.info(f"Connecting to video source: {source}")
-            cap = setup_camera(source)
-            
-            # Calculate frame delay for desired FPS
-            frame_delay = 1.0 / self.fps
-            last_frame_time = time.time()
-            
-            logger.info(f"Starting detection at {self.fps} FPS for client {client_id}...")
-            
-            while self.active_streams.get(client_id, {}).get("active", False):
-                current_time = time.time()
-                if current_time - last_frame_time >= frame_delay:
-                    ret, frame = cap.read()
-                    if not ret:
-                        logger.warning("Failed to read frame, attempting to reconnect...")
-                        cap.release()
-                        cap = setup_camera(source)
-                        continue
-                    
-                    # Run YOLO detection
-                    yolo_results = yolo_model(frame)
-                    
-                    # Run CLIP analysis
-                    is_suspicious, description = analyze_frame_with_clip(
-                        frame, 
-                        yolo_results,
-                        vl_processor,
-                        vl_model,
-                        device
-                    )
-                    
-                    # Create result object
-                    result = {
-                        "timestamp": datetime.now().isoformat(),
-                        "is_suspicious": is_suspicious,
-                        "description": description
-                    }
-                    
-                    # Publish result to Redis
-                    self.redis_client.publish(channel, json.dumps(result))
-                    
-                    last_frame_time = current_time
+        reconnect_attempts = 0
+        max_reconnect_attempts = 5
+        reconnect_delay = 5  # seconds
+        
+        while self.active_streams.get(client_id, {}).get("active", False):
+            try:
+                # Setup camera
+                logger.info(f"Connecting to video source: {source}")
+                cap = setup_camera(source)
                 
-                time.sleep(0.01)
-            
-            # Clean up
-            cap.release()
-            logger.info(f"Stream processing stopped for client {client_id}")
-            
-        except Exception as e:
-            logger.error(f"Error processing stream: {str(e)}")
-            self.redis_client.publish(channel, json.dumps({"error": str(e)}))
+                # Calculate frame delay for desired FPS
+                frame_delay = 1.0 / self.fps
+                last_frame_time = time.time()
+                
+                logger.info(f"Starting detection at {self.fps} FPS for client {client_id}...")
+                
+                # Reset reconnect attempts on successful connection
+                reconnect_attempts = 0
+                
+                while self.active_streams.get(client_id, {}).get("active", False):
+                    current_time = time.time()
+                    if current_time - last_frame_time >= frame_delay:
+                        ret, frame = cap.read()
+                        if not ret:
+                            logger.warning("Failed to read frame, attempting to reconnect...")
+                            break  # Break inner loop to attempt reconnection
+                        
+                        # Run YOLO detection
+                        yolo_results = yolo_model(frame)
+                        
+                        # Run CLIP analysis
+                        is_suspicious, description = analyze_frame_with_clip(
+                            frame, 
+                            yolo_results,
+                            vl_processor,
+                            vl_model,
+                            device
+                        )
+                        
+                        # Create result object
+                        result = {
+                            "timestamp": datetime.now().isoformat(),
+                            "is_suspicious": is_suspicious,
+                            "description": description
+                        }
+                        
+                        # Publish result to Redis
+                        self.redis_client.publish(channel, json.dumps(result))
+                        
+                        last_frame_time = current_time
+                    
+                    time.sleep(0.01)
+                
+                # Clean up
+                cap.release()
+                
+            except Exception as e:
+                logger.error(f"Error processing stream: {str(e)}")
+                self.redis_client.publish(channel, json.dumps({"error": str(e)}))
+                
+                # Handle reconnection
+                reconnect_attempts += 1
+                if reconnect_attempts >= max_reconnect_attempts:
+                    logger.error(f"Max reconnection attempts ({max_reconnect_attempts}) reached. Stopping stream.")
+                    self.redis_client.publish(channel, json.dumps({"error": "Max reconnection attempts reached. Stream stopped."}))
+                    break
+                
+                logger.info(f"Attempting to reconnect in {reconnect_delay} seconds (attempt {reconnect_attempts}/{max_reconnect_attempts})")
+                time.sleep(reconnect_delay)
+        
+        logger.info(f"Stream processing stopped for client {client_id}")
     
     def get_active_streams(self):
         """Get list of active streams"""
