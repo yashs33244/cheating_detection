@@ -1,0 +1,302 @@
+[
+  {
+    "timestamp": "2025-04-12T06:21:04.349839",
+    "num_faces": 3,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "happy",
+      "neutral",
+      "happy"
+    ],
+    "focus_scores": [
+      0.8,
+      0.8,
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:05.084372",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:05.780475",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:06.543900",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:07.296379",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:08.074892",
+    "num_faces": 1,
+    "has_low_focus": true,
+    "phone_usage": false,
+    "emotions": [
+      "fear"
+    ],
+    "focus_scores": [
+      0.3
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:08.778482",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:09.474261",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:10.104836",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:10.753967",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:11.446758",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "happy"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:12.110554",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:12.775666",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "happy"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:13.392925",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:14.065154",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:14.713581",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:15.344509",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:15.961514",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:16.612628",
+    "num_faces": 1,
+    "has_low_focus": true,
+    "phone_usage": false,
+    "emotions": [
+      "sad"
+    ],
+    "focus_scores": [
+      0.4
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:17.303366",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:17.922085",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:18.558338",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:19.188513",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:19.985336",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:20.641356",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:21.264702",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:21.936288",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:22.554037",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:23.228739",
+    "num_faces": 1,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [
+      "neutral"
+    ],
+    "focus_scores": [
+      0.8
+    ]
+  },
+  {
+    "timestamp": "2025-04-12T06:21:23.830895",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  },
+  {
+    "timestamp": "2025-04-12T06:21:24.459091",
+    "num_faces": 0,
+    "has_low_focus": false,
+    "phone_usage": false,
+    "emotions": [],
+    "focus_scores": []
+  }
+]

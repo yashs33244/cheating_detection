@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mood_analyzer:
+    build: .
+    image: mood_analyzer:latest
+    ports:
+      - "5002:5002"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./:/app
+      - ..:/videos
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  mood_frames:

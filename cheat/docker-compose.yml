@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  cheat_detection:
+    build: .
+    image: cheat_detection:latest
+    ports:
+      - "5003:5003"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./:/app
+      - flagged_frames:/app/flagged_frames
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  flagged_frames:

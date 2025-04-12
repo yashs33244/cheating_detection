@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  # Main Cheating Detection Service (original)
+  cheating_detection:
+    build: ./
+    image: yashs3324/cheating_detection:latest
+    ports:
+      - "5001:5001"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./:/app
+      - /Users/tanishqsingh/Downloads/Cheating detection:/videos
+    restart: unless-stopped
+
+  # New Cheating Detection Service
+  cheat_detection:
+    build: ./cheat
+    image: cheat_detection:latest
+    ports:
+      - "5003:5003"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./cheat:/app
+      - flagged_frames:/app/flagged_frames
+    restart: unless-stopped
+
+  # Mood Analyzer Service
+  mood_analyzer:
+    build: ./doff
+    image: mood_analyzer:latest
+    ports:
+      - "5002:5002"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./doff:/app
+      - mood_frames:/app/mood_frames
+    restart: unless-stopped
+
+  # Shared Redis Instance
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  mood_frames:
+  flagged_frames:
